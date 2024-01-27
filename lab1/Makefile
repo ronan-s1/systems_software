@@ -1,5 +1,4 @@
-myprog: main.c areaOfRectangle.c areaOfTriangle.c areaOfCircle.c
-	gcc -o myprog main.c areaOfRectangle.c areaOfTriangle.c areaOfCircle.c
+myprog: gcc -o myprog main.c areaOfRectangle.c areaOfTriangle.c areaOfCircle.c
 
 clean:
 	rm -f myprog
