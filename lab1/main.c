@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "areaFunctions.h"
 
 int main(int argc, char **argv) 
