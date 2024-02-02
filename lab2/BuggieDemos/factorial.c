@@ -12,7 +12,7 @@ int main()
 
 long factorial(int f) {
    if(f == 0) {
-      return f;
+      return 1;
    } else {
       return f*factorial(f-1);
    }

@@ -12,7 +12,7 @@ int main() {
 		"Sunday"	
 	};
 
-	for(i=0; i<=7 ; i++) {
+	for(i=0; i<7 ; i++) {
 		printf("I love %s\n", weekday[i]);		
 	}
 	
