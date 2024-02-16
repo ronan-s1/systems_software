@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
   //Uncomment the following code when you implement createMatrix
   //otherwise it will give a segmention fault if createMatrix
   //is not implemented correctly 
-  /*
   A->data[0] = 1.2;
   A->data[1] = 2.3;
   A->data[2] = 3.4;
@@ -45,7 +44,6 @@ int main(int argc, char *argv[])
   destroyMatrix(A);
   destroyMatrix(B);
   destroyMatrix(C);
-  */
   return 0;
 }
 
@@ -54,22 +52,40 @@ int main(int argc, char *argv[])
 
 Matrix *createMatrix(int nrows, int ncols)
 {
-  // fill in the code here
+  Matrix *M = malloc(sizeof(Matrix));
+  M->data = malloc(sizeof(double) * nrows * ncols);
+  M->nrows = nrows;
+  M->ncols = ncols;
+  return M;
 }
 
 void destroyMatrix(Matrix *M)
 {
-  // fill in the code here
+  free(M->data);
+  free(M);
 }
 
 void printmat(Matrix *M)
 {
-  // fill in the code here
-  printf("so far printmat does nothing\n");
+  int i, j;
+  for (i = 0; i < M->nrows; i++) {
+    for (j = 0; j < M->ncols; j++) {
+      printf("%f ", M->data[i * M->ncols + j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
 }
 
 void matrixmult(Matrix *A, Matrix *B, Matrix *C)
 {
-  // fill in the code here
-  printf("so far matrixmult does nothing\n");
+  int i, j, k;
+  for (i = 0; i < A->nrows; i++) {
+    for (j = 0; j < B->ncols; j++) {
+      C->data[i * C->ncols + j] = 0;
+      for (k = 0; k < A->ncols; k++) {
+        C->data[i * C->ncols + j] += A->data[i * A->ncols + k] * B->data[k * B->ncols + j];
+      }
+    }
+  }
 }
