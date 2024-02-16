@@ -6,6 +6,7 @@ int main()
 {
     time_t now;
     struct tm newyear;
+    struct tm countdown;
     double seconds;
 
     time(&now);
@@ -15,7 +16,9 @@ int main()
     newyear.tm_min = 45;
     newyear.tm_sec = 0;
 
-    seconds = difftime(now, mktime(&newyear));
+    countdown = newyear;
+
+    seconds = difftime(now, mktime(&countdown));
 
     if (seconds < 0) 
     {
