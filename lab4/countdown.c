@@ -23,10 +23,10 @@ int main()
 
         while (seconds > 0) 
         {
-            printf("%f seconds left\n", seconds);
-            sleep(1);
             time(&now);
             seconds = difftime(now, mktime(&newyear));
+            printf("%f seconds left\n", seconds);
+            sleep(1);
         }
     }
 
