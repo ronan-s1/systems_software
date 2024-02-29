@@ -1,5 +1,4 @@
-[2024-02-29 16:41:09] Daemon is running...
-[2024-02-29 16:41:09] msg: warehouse.xml has been moved to dashboard
-[2024-02-29 16:41:09] msg: manufacturing.xml has been moved to dashboard
-[2024-02-29 16:41:09] msg: sales.xml report is missing
-[2024-02-29 16:41:09] msg: distribution.xml has been moved to dashboard
+[2024-02-29 22:00:51] msg: File 'warehouse.xml' has been modified in upload/ directory by root
+[2024-02-29 22:04:51] msg: File 'warehouse.xml' has been deleted from upload/ directory by root
+[2024-02-29 22:05:01] msg: File 'new.xml' has been created in upload/ directory by root
+[2024-02-29 22:05:16] msg: File 'new.xml' has been modified in upload/ directory by root

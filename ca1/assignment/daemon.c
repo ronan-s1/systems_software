@@ -106,24 +106,27 @@ int main()
     check_uploads_time.tm_min = 40;
     check_uploads_time.tm_sec = 0;
 
+    // Get current time
+    time_t rawtime;
+    struct tm *info;
+    char timestamp[20];
+
+    time(&rawtime);
+    info = localtime(&rawtime);
+    strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", info);
+
+    // Log message to file
+    dprintf(fd, "[%s] Daemon is running...\n", timestamp);
+    fsync(fd);
+
     // Main daemon loop
+    check_file_uploads();
+
     while (1)
     {
-        // Get current time
-        time_t rawtime;
-        struct tm *info;
-        char timestamp[20];
-
-        time(&rawtime);
-        info = localtime(&rawtime);
-        strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", info);
-
-        // Log message to file
-        dprintf(fd, "[%s] Daemon is running...\n", timestamp);
-        fsync(fd);
-
-        move_reports();
-        break;
+        // move_reports();
+        // break;
+        sleep(1);
     }
 
     // Close log file
