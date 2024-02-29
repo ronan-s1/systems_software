@@ -1,0 +1,5 @@
+[2024-02-29 15:45:40] Daemon is running...
+[2024-02-29 15:45:40] user: ronan, msg: warehouse.xml has been moved to dashboard
+[2024-02-29 15:45:40] user: ronan, msg: manufacturing.xml has been moved to dashboard
+[2024-02-29 15:45:40] user: ronan, msg: sales.xml has been moved to dashboard
+[2024-02-29 15:45:40] user: ronan, msg: distribution.xml has been moved to dashboard
