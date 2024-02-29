@@ -12,14 +12,15 @@
 
 void move_reports()
 {
-    // Get the username of the current user
-    char *username = getlogin();
-
     // Get the current timestamp
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
     char timestamp[20];
     strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);
+
+    // Expected file names
+    const char *expected_files[] = {"warehouse.xml", "manufacturing.xml", "sales.xml", "distribution.xml"};
+    int num_expected_files = sizeof(expected_files) / sizeof(expected_files[0]);
 
     // Change permissions of upload and dashboard directories
     if (chmod(UPLOAD_DIR, 0555) == -1 || chmod(DASHBOARD_DIR, 0555) == -1) {
@@ -27,16 +28,12 @@ void move_reports()
         exit(EXIT_FAILURE);
     }
 
-    // Expected file names
-    const char *expected_files[] = {"warehouse.xml", "manufacturing.xml", "sales.xml", "distribution.xml"};
-    int num_expected_files = sizeof(expected_files) / sizeof(expected_files[0]);
-
     // Iterate over expected files
     for (int i = 0; i < num_expected_files; i++)
     {
         // Check if the file exists in the upload directory
         char ls_command[1024];
-        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -q %s", UPLOAD_DIR, expected_files[i]);
+        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -qw %s", UPLOAD_DIR, expected_files[i]);
         int ls_status = system(ls_command);
 
         // If file exists, move it to the dashboard directory
@@ -47,22 +44,23 @@ void move_reports()
             int mv_status = system(mv_command);
 
             // If move is successful, log the event else log the error
+            FILE *log_file = fopen(LOG_FILE, "a");
             if (mv_status == 0)
             {
-                FILE *log_file = fopen(LOG_FILE, "a");
                 if (log_file == NULL)
                 {
                     perror("fopen");
                     exit(EXIT_FAILURE);
                 }
-                fprintf(log_file, "[%s] user: %s, msg: %s has been moved to dashboard\n", timestamp, username, expected_files[i]);
-                fclose(log_file);
+                fprintf(log_file, "[%s] msg: %s has been moved to dashboard\n", timestamp, expected_files[i]);
             }
             else
             {
-                fprintf(stderr, "Error moving file %s to dashboard\n", expected_files[i]);
+                fprintf(log_file, "[%s] msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
                 exit(EXIT_FAILURE);
             }
+            fclose(log_file);
+
         }
         else
         {
@@ -73,7 +71,7 @@ void move_reports()
                 perror("fopen");
                 exit(EXIT_FAILURE);
             }
-            fprintf(log_file, "[%s] user: %s, msg: %s report is missing\n", timestamp, username, expected_files[i]);
+            fprintf(log_file, "[%s] msg: %s report is missing\n", timestamp, expected_files[i]);
             fclose(log_file);
         }
     }
