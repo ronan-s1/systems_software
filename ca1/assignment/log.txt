@@ -1,4 +1,9 @@
-[2024-02-29 22:00:51] msg: File 'warehouse.xml' has been modified in upload/ directory by root
-[2024-02-29 22:04:51] msg: File 'warehouse.xml' has been deleted from upload/ directory by root
-[2024-02-29 22:05:01] msg: File 'new.xml' has been created in upload/ directory by root
-[2024-02-29 22:05:16] msg: File 'new.xml' has been modified in upload/ directory by root
+[2024-02-29 23:08:38] Daemon is running...
+[2024-02-29 23:08:38] action: MOVE, msg: warehouse.xml report is missing
+[2024-02-29 23:08:38] action: MOVE, msg: manufacturing.xml has been moved to dashboard
+[2024-02-29 23:08:38] action: MOVE, msg: sales.xml has been moved to dashboard
+[2024-02-29 23:08:38] action: MOVE, msg: distribution.xml has been moved to dashboard
+[2024-02-29 23:08:38] action: BACKUP, msg: warehouse.xml report is missing
+[2024-02-29 23:08:38] action: BACKUP, msg: manufacturing.xml has been copied to dashboard
+[2024-02-29 23:08:38] action: BACKUP, msg: sales.xml has been copied to dashboard
+[2024-02-29 23:08:38] action: BACKUP, msg: distribution.xml has been copied to dashboard

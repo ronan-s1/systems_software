@@ -6,11 +6,11 @@
 #include <time.h>
 #include <sys/stat.h>
 
-#define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
+#define DASHBOARD_BACKUP_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard_backup"
 #define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
 #define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
 
-void move_reports()
+void backup()
 {
     // Get the current timestamp
     time_t t = time(NULL);
@@ -23,7 +23,7 @@ void move_reports()
     int num_expected_files = sizeof(expected_files) / sizeof(expected_files[0]);
 
     // Change permissions of upload and dashboard directories
-    if (chmod(UPLOAD_DIR, 0555) == -1 || chmod(DASHBOARD_DIR, 0555) == -1) {
+    if (chmod(DASHBOARD_DIR, 0555) == -1 || chmod(DASHBOARD_BACKUP_DIR, 0555) == -1) {
         perror("chmod");
         exit(EXIT_FAILURE);
     }
@@ -33,30 +33,30 @@ void move_reports()
     {
         // Check if the file exists in the upload directory
         char ls_command[1024];
-        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -qw %s", UPLOAD_DIR, expected_files[i]);
+        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -qw %s", DASHBOARD_DIR, expected_files[i]);
         int ls_status = system(ls_command);
 
         // If file exists, move it to the dashboard directory
         if (ls_status == 0)
         {
-            char mv_command[1024];
-            snprintf(mv_command, sizeof(mv_command), "mv %s/%s %s/", UPLOAD_DIR, expected_files[i], DASHBOARD_DIR);
-            int mv_status = system(mv_command);
+            char cp_command[1024];
+            snprintf(cp_command, sizeof(cp_command), "cp %s/%s %s/", DASHBOARD_DIR, expected_files[i], DASHBOARD_BACKUP_DIR);
+            int cp_status = system(cp_command);
 
             // If move is successful, log the event else log the error
             FILE *log_file = fopen(LOG_FILE, "a");
-            if (mv_status == 0)
+            if (cp_status == 0)
             {
                 if (log_file == NULL)
                 {
                     perror("fopen");
                     exit(EXIT_FAILURE);
                 }
-                fprintf(log_file, "[%s] action: MOVE, msg: %s has been moved to dashboard\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: %s has been copied to dashboard\n", timestamp, expected_files[i]);
             }
             else
             {
-                fprintf(log_file, "[%s] action: MOVE, msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
                 exit(EXIT_FAILURE);
             }
             fclose(log_file);
@@ -71,13 +71,13 @@ void move_reports()
                 perror("fopen");
                 exit(EXIT_FAILURE);
             }
-            fprintf(log_file, "[%s] action: MOVE, msg: %s report is missing\n", timestamp, expected_files[i]);
+            fprintf(log_file, "[%s] action: BACKUP, msg: %s report is missing\n", timestamp, expected_files[i]);
             fclose(log_file);
         }
     }
 
     // Restore permissions of upload and dashboard directories
-    if (chmod(UPLOAD_DIR, 0777) == -1 || chmod(DASHBOARD_DIR, 0777) == -1) {
+    if (chmod(DASHBOARD_DIR, 0777) == -1 || chmod(DASHBOARD_BACKUP_DIR, 0777) == -1) {
         perror("chmod");
         exit(EXIT_FAILURE);
     }

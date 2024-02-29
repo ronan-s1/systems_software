@@ -120,13 +120,16 @@ int main()
     fsync(fd);
 
     // Main daemon loop
-    check_file_uploads();
+    // check_file_uploads();
 
     while (1)
     {
-        // move_reports();
+        move_reports();
+        backup();
+
         // break;
         sleep(1);
+        break;
     }
 
     // Close log file

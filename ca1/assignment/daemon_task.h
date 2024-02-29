@@ -5,9 +5,7 @@
 
 void move_reports(void);
 
-void backup_dashboard(void);
-
-void generate_reports(void);
+void backup(void);
 
 void check_file_uploads(void);
 

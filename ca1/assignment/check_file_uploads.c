@@ -129,7 +129,7 @@ void check_file_uploads()
                                 perror("fopen");
                                 exit(EXIT_FAILURE);
                             }
-                            fprintf(log_file, "[%s] msg: File '%s' has been modified in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
+                            fprintf(log_file, "[%s] action: MONITOR, msg: File '%s' has been modified in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
                             fclose(log_file);
                         }
                         i++;
@@ -151,7 +151,7 @@ void check_file_uploads()
                             perror("fopen");
                             exit(EXIT_FAILURE);
                         }
-                        fprintf(log_file, "[%s] msg: File '%s' has been deleted from upload/ directory by %s\n", timestamp, prev_files[i].name, prev_files[i].last_modified_user);
+                        fprintf(log_file, "[%s] action: MONITOR, msg: File '%s' has been deleted from upload/ directory by %s\n", timestamp, prev_files[i].name, prev_files[i].last_modified_user);
                         fclose(log_file);
 
                         i++;
@@ -172,7 +172,7 @@ void check_file_uploads()
                             perror("fopen");
                             exit(EXIT_FAILURE);
                         }
-                        fprintf(log_file, "[%s] msg: File '%s' has been created in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
+                        fprintf(log_file, "[%s] action: MONITOR, msg: File '%s' has been created in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
                         fclose(log_file);
 
                         j++;
@@ -195,7 +195,7 @@ void check_file_uploads()
                         perror("fopen");
                         exit(EXIT_FAILURE);
                     }
-                    fprintf(log_file, "[%s] msg: File '%s' has been deleted from upload/ directory by %s\n", timestamp, prev_files[i].name, prev_files[i].last_modified_user);
+                    fprintf(log_file, "[%s] action: MONITOR, msg: File '%s' has been deleted from upload/ directory by %s\n", timestamp, prev_files[i].name, prev_files[i].last_modified_user);
                     fclose(log_file);
                 }
                 for (; j < num_files; j++)
@@ -214,7 +214,7 @@ void check_file_uploads()
                         perror("fopen");
                         exit(EXIT_FAILURE);
                     }
-                    fprintf(log_file, "[%s] msg: File '%s' has been created in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
+                    fprintf(log_file, "[%s] action: MONITOR, msg: File '%s' has been created in upload/ directory by %s\n", timestamp, current_files[j].name, current_files[j].last_modified_user);
                     fclose(log_file);
                 }
             }
