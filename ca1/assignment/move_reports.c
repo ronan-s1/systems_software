@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <time.h>
+#include <sys/stat.h>
 
 #define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
 #define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
@@ -19,6 +20,12 @@ void move_reports()
     struct tm *tm_info = localtime(&t);
     char timestamp[20];
     strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);
+
+    // Change permissions of upload and dashboard directories
+    if (chmod(UPLOAD_DIR, 0555) == -1 || chmod(DASHBOARD_DIR, 0555) == -1) {
+        perror("chmod");
+        exit(EXIT_FAILURE);
+    }
 
     // Expected file names
     const char *expected_files[] = {"warehouse.xml", "manufacturing.xml", "sales.xml", "distribution.xml"};
@@ -39,7 +46,7 @@ void move_reports()
             snprintf(mv_command, sizeof(mv_command), "mv %s/%s %s/", UPLOAD_DIR, expected_files[i], DASHBOARD_DIR);
             int mv_status = system(mv_command);
 
-            // Log move operation
+            // If move is successful, log the event else log the error
             if (mv_status == 0)
             {
                 FILE *log_file = fopen(LOG_FILE, "a");
@@ -69,5 +76,11 @@ void move_reports()
             fprintf(log_file, "[%s] user: %s, msg: %s report is missing\n", timestamp, username, expected_files[i]);
             fclose(log_file);
         }
+    }
+
+    // Restore permissions of upload and dashboard directories
+    if (chmod(UPLOAD_DIR, 0777) == -1 || chmod(DASHBOARD_DIR, 0777) == -1) {
+        perror("chmod");
+        exit(EXIT_FAILURE);
     }
 }
