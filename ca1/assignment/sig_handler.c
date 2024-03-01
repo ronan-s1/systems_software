@@ -27,7 +27,7 @@ void sig_handler(int sigNum)
         fprintf(log_file, "[%s] action: TRANSFER_TRIGGER, msg: initiating MOVE and BACKUP\n", timestamp);
         fclose(log_file);
         
-
+        check_file_uploads();
         lock_directories();
         move_reports();	  
         backup();
