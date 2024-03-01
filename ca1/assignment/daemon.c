@@ -100,7 +100,7 @@ int main()
     }
 
     struct tm check_uploads_time;
-    time(&now); /* get current time; same as: now = time(NULL)  */
+    time(&now);
     check_uploads_time = *localtime(&now);
     check_uploads_time.tm_hour = 13;
     check_uploads_time.tm_min = 40;
@@ -124,12 +124,28 @@ int main()
 
     while (1)
     {
-        move_reports();
-        backup();
-
-        // break;
-        sleep(1);
+        check_file_uploads();
         break;
+        
+
+
+        //countdown to 23:30
+	  	time(&now);
+		double seconds_to_files_check = difftime(now,mktime(&check_uploads_time));
+		if(seconds_to_files_check == 0) 
+        {
+            check_file_uploads();
+			//change to tommorow's day
+			update_timer(&check_uploads_time);
+		}
+
+        time(&now);
+		double seconds_to_transfer = difftime(now, mktime(&backup_time));
+		if(seconds_to_transfer == 0) 
+        {
+			move_reports();
+            backup();
+		}
     }
 
     // Close log file
