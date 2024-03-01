@@ -1,0 +1,37 @@
+#include <unistd.h>
+#include <syslog.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <string.h>
+#include "daemon_task.h"
+
+#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+
+void sig_handler(int sigNum)
+{
+    if (sigNum == SIGINT)
+    {
+        time_t t = time(NULL);
+        struct tm *tm_info = localtime(&t);
+        char timestamp[20];
+        strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);
+
+        FILE *log_file = fopen(LOG_FILE, "a");
+        if (log_file == NULL)
+        {
+            perror("fopen");
+            exit(EXIT_FAILURE);
+        }
+        fprintf(log_file, "[%s] action: TRANSFER_TRIGGER, msg: initiating moving and backup\n", timestamp);
+        fclose(log_file);
+        
+
+        lock_directories();
+        move_reports();	  
+        backup();
+        sleep(30);
+        unlock_directories();
+    }
+}

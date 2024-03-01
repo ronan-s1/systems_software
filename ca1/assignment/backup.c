@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <sys/stat.h>
+#include "daemon_task.h"
 
 #define DASHBOARD_BACKUP_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard_backup"
 #define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"

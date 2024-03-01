@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <sys/stat.h>
+#include "daemon_task.h"
 
 #define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
 #define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
@@ -21,12 +22,6 @@ void move_reports()
     // Expected file names
     const char *expected_files[] = {"warehouse.xml", "manufacturing.xml", "sales.xml", "distribution.xml"};
     int num_expected_files = sizeof(expected_files) / sizeof(expected_files[0]);
-
-    // Change permissions of upload and dashboard directories
-    if (chmod(UPLOAD_DIR, 0555) == -1 || chmod(DASHBOARD_DIR, 0555) == -1) {
-        perror("chmod");
-        exit(EXIT_FAILURE);
-    }
 
     // Iterate over expected files
     for (int i = 0; i < num_expected_files; i++)
@@ -74,11 +69,5 @@ void move_reports()
             fprintf(log_file, "[%s] action: MOVE, msg: %s report is missing\n", timestamp, expected_files[i]);
             fclose(log_file);
         }
-    }
-
-    // Restore permissions of upload and dashboard directories
-    if (chmod(UPLOAD_DIR, 0777) == -1 || chmod(DASHBOARD_DIR, 0777) == -1) {
-        perror("chmod");
-        exit(EXIT_FAILURE);
     }
 }

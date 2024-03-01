@@ -11,16 +11,6 @@
 
 #define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
 
-// Signal handler for SIGTERM
-void signal_handler(int sig)
-{
-    if (sig == SIGTERM)
-    {
-        syslog(LOG_INFO, "Received SIGINT signal, shutting down.");
-        exit(EXIT_SUCCESS);
-    }
-}
-
 int main()
 {
     time_t now;
@@ -56,7 +46,7 @@ int main()
     }
 
     // Set signal handler for SIGTERM
-    signal(SIGTERM, signal_handler);
+    // signal(SIGTERM, sig_handler);
 
     // Fork again
     int pid_2 = fork();
@@ -120,32 +110,51 @@ int main()
     fsync(fd);
 
     // Main daemon loop
-    // check_file_uploads();
-
     while (1)
     {
-        check_file_uploads();
-        break;
-        
+        // Set signal handler for SIGINT, "kill -SIGINT pid" will trigger this
+        if (signal(SIGINT, sig_handler) == SIG_ERR)
+        {
+            time_t t = time(NULL);
+            struct tm *tm_info = localtime(&t);
+            char timestamp[20];
+            strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", tm_info);
 
+            FILE *log_file = fopen(LOG_FILE, "a");
+            if (log_file == NULL)
+            {
+                perror("fopen");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(log_file, "[%s] action: TRANSFER_TRIGGER, msg: daemon.c SIG_ERR recieved\n", timestamp);
+            fclose(log_file);
+        }
 
-        //countdown to 23:30
-	  	time(&now);
-		double seconds_to_files_check = difftime(now,mktime(&check_uploads_time));
-		if(seconds_to_files_check == 0) 
+        // countdown to 23:30
+        time(&now);
+        double seconds_to_files_check = difftime(now, mktime(&check_uploads_time));
+        if (seconds_to_files_check == 0)
         {
             check_file_uploads();
-			//change to tommorow's day
-			update_timer(&check_uploads_time);
-		}
+
+            // change to tommorow's day
+            update_timer(&check_uploads_time);
+        }
 
         time(&now);
-		double seconds_to_transfer = difftime(now, mktime(&backup_time));
-		if(seconds_to_transfer == 0) 
+        double seconds_to_transfer = difftime(now, mktime(&backup_time));
+        if (seconds_to_transfer == 0)
         {
-			move_reports();
-            backup();
-		}
+            lock_directories();
+			move_reports();	  
+			backup();
+			sleep(30);
+			unlock_directories();
+    
+			// After tasks are finished, start counting to next day
+			update_timer(&backup_time);
+        }
+        sleep(1);
     }
 
     // Close log file

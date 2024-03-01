@@ -7,6 +7,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <pwd.h>
+#include "daemon_task.h"
 
 #define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
 #define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
