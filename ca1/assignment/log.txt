@@ -1,11 +1,14 @@
-[2024-03-01 00:36:52] Daemon is running...
-[2024-03-01 00:39:28] Daemon is running...
-[2024-03-01 00:39:43] action: TRANSFER_TRIGGER, msg: initiating moving and backup
-[2024-03-01 00:39:43] action: MOVE, msg: warehouse.xml report is missing
-[2024-03-01 00:39:43] action: MOVE, msg: manufacturing.xml has been moved to dashboard
-[2024-03-01 00:39:43] action: MOVE, msg: sales.xml has been moved to dashboard
-[2024-03-01 00:39:43] action: MOVE, msg: distribution.xml has been moved to dashboard
-[2024-03-01 00:39:43] action: BACKUP, msg: warehouse.xml report is missing
-[2024-03-01 00:39:43] action: BACKUP, msg: manufacturing.xml has been copied to dashboard
-[2024-03-01 00:39:43] action: BACKUP, msg: sales.xml has been copied to dashboard
-[2024-03-01 00:39:43] action: BACKUP, msg: distribution.xml has been copied to dashboard
+[2024-03-01 01:01:15] Daemon is running...
+[2024-03-01 01:02:07] action: TRANSFER_TRIGGER, msg: initiating MOVE and BACKUP
+[2024-03-01 01:02:07] action: CHECK, msg: warehouse.xml report is missing
+[2024-03-01 01:02:07] action: CHECK, msg: manufacturing.xml report is present, modified_by: root, last_modified_time: 2024-02-29 23:08:38
+[2024-03-01 01:02:07] action: CHECK, msg: sales.xml report is present, modified_by: root, last_modified_time: 2024-02-29 23:55:05
+[2024-03-01 01:02:07] action: CHECK, msg: distribution.xml report is present, modified_by: root, last_modified_time: 2024-02-29 21:44:49
+[2024-03-01 01:02:07] action: MOVE, msg: warehouse.xml report is missing
+[2024-03-01 01:02:07] action: MOVE, msg: manufacturing.xml has been moved to dashboard
+[2024-03-01 01:02:07] action: MOVE, msg: sales.xml has been moved to dashboard
+[2024-03-01 01:02:07] action: MOVE, msg: distribution.xml has been moved to dashboard
+[2024-03-01 01:02:07] action: BACKUP, msg: warehouse.xml report is missing
+[2024-03-01 01:02:07] action: BACKUP, msg: manufacturing.xml has been copied to dashboard
+[2024-03-01 01:02:07] action: BACKUP, msg: sales.xml has been copied to dashboard
+[2024-03-01 01:02:07] action: BACKUP, msg: distribution.xml has been copied to dashboard
