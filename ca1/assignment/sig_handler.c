@@ -24,7 +24,7 @@ void sig_handler(int sigNum)
             perror("fopen");
             exit(EXIT_FAILURE);
         }
-        fprintf(log_file, "[%s] action: TRANSFER_TRIGGER, msg: initiating moving and backup\n", timestamp);
+        fprintf(log_file, "[%s] action: TRANSFER_TRIGGER, msg: initiating MOVE and BACKUP\n", timestamp);
         fclose(log_file);
         
 

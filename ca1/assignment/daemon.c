@@ -45,9 +45,6 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    // Set signal handler for SIGTERM
-    // signal(SIGTERM, sig_handler);
-
     // Fork again
     int pid_2 = fork();
 
