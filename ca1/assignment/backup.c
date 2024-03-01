@@ -23,19 +23,32 @@ void backup()
     // Iterate over expected files
     for (int i = 0; i < num_expected_files; i++)
     {
-        // Check if the file exists in the upload directory
-        char ls_command[1024];
-        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -qw %s", DASHBOARD_DIR, expected_files[i]);
-        int ls_status = system(ls_command);
+        // Construct the full path to the file
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", DASHBOARD_DIR, expected_files[i]);
 
-        // If file exists, move it to the dashboard directory
-        if (ls_status == 0)
+        // Check if the file exists using stat
+        struct stat file_stat;
+        if (stat(file_path, &file_stat) == -1)
         {
+            // Log missing file
+            FILE *log_file = fopen(LOG_FILE, "a");
+            if (log_file == NULL)
+            {
+                perror("fopen");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(log_file, "[%s] action: BACKUP, msg: %s report is missing\n", timestamp, expected_files[i]);
+            fclose(log_file);
+        }
+        else
+        {
+            // Copy the file to the backup directory
             char cp_command[1024];
             snprintf(cp_command, sizeof(cp_command), "cp %s/%s %s/", DASHBOARD_DIR, expected_files[i], DASHBOARD_BACKUP_DIR);
             int cp_status = system(cp_command);
 
-            // If move is successful, log the event else log the error
+            // If copy is successful, log the event else log the error
             FILE *log_file = fopen(LOG_FILE, "a");
             if (cp_status == 0)
             {
@@ -51,18 +64,6 @@ void backup()
                 fprintf(log_file, "[%s] action: BACKUP, msg: Error copying file %s to dashboard_backup\n", timestamp, expected_files[i]);
                 exit(EXIT_FAILURE);
             }
-            fclose(log_file);
-        }
-        else
-        {
-            // Log missing file
-            FILE *log_file = fopen(LOG_FILE, "a");
-            if (log_file == NULL)
-            {
-                perror("fopen");
-                exit(EXIT_FAILURE);
-            }
-            fprintf(log_file, "[%s] action: BACKUP, msg: %s report is missing\n", timestamp, expected_files[i]);
             fclose(log_file);
         }
     }
