@@ -20,12 +20,6 @@ void backup()
     const char *expected_files[] = {"warehouse.xml", "manufacturing.xml", "sales.xml", "distribution.xml"};
     int num_expected_files = sizeof(expected_files) / sizeof(expected_files[0]);
 
-    // Change permissions of upload and dashboard directories
-    if (chmod(DASHBOARD_DIR, 0555) == -1 || chmod(DASHBOARD_BACKUP_DIR, 0555) == -1) {
-        perror("chmod");
-        exit(EXIT_FAILURE);
-    }
-
     // Iterate over expected files
     for (int i = 0; i < num_expected_files; i++)
     {
@@ -50,15 +44,14 @@ void backup()
                     perror("fopen");
                     exit(EXIT_FAILURE);
                 }
-                fprintf(log_file, "[%s] action: BACKUP, msg: %s has been copied to dashboard_backup/ directory\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: %s has been copied to dashboard_backup\n", timestamp, expected_files[i]);
             }
             else
             {
-                fprintf(log_file, "[%s] action: BACKUP, msg: Error moving file %s to dashboard_backup/ directory\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: Error copying file %s to dashboard_backup\n", timestamp, expected_files[i]);
                 exit(EXIT_FAILURE);
             }
             fclose(log_file);
-
         }
         else
         {
@@ -72,11 +65,5 @@ void backup()
             fprintf(log_file, "[%s] action: BACKUP, msg: %s report is missing\n", timestamp, expected_files[i]);
             fclose(log_file);
         }
-    }
-
-    // Restore permissions of upload and dashboard directories
-    if (chmod(DASHBOARD_DIR, 0777) == -1 || chmod(DASHBOARD_BACKUP_DIR, 0777) == -1) {
-        perror("chmod");
-        exit(EXIT_FAILURE);
     }
 }

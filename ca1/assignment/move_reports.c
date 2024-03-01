@@ -23,38 +23,13 @@ void move_reports()
     // Iterate over expected files
     for (int i = 0; i < num_expected_files; i++)
     {
-        // Check if the file exists in the upload directory
-        char ls_command[1024];
-        snprintf(ls_command, sizeof(ls_command), "ls %s | grep -qw %s", UPLOAD_DIR, expected_files[i]);
-        int ls_status = system(ls_command);
+        // Construct the full path to the file
+        char file_path[1024];
+        snprintf(file_path, sizeof(file_path), "%s/%s", UPLOAD_DIR, expected_files[i]);
 
-        // If file exists, move it to the dashboard directory
-        if (ls_status == 0)
-        {
-            char mv_command[1024];
-            snprintf(mv_command, sizeof(mv_command), "mv %s/%s %s/", UPLOAD_DIR, expected_files[i], DASHBOARD_DIR);
-            int mv_status = system(mv_command);
-
-            // If move is successful, log the event else log the error
-            FILE *log_file = fopen(LOG_FILE, "a");
-            if (mv_status == 0)
-            {
-                if (log_file == NULL)
-                {
-                    perror("fopen");
-                    exit(EXIT_FAILURE);
-                }
-                fprintf(log_file, "[%s] action: MOVE, msg: %s has been moved to dashboard\n", timestamp, expected_files[i]);
-            }
-            else
-            {
-                fprintf(log_file, "[%s] action: MOVE, msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
-                exit(EXIT_FAILURE);
-            }
-            fclose(log_file);
-
-        }
-        else
+        // Check if the file exists using stat
+        struct stat file_stat;
+        if (stat(file_path, &file_stat) == -1)
         {
             // Log missing file
             FILE *log_file = fopen(LOG_FILE, "a");
@@ -64,6 +39,30 @@ void move_reports()
                 exit(EXIT_FAILURE);
             }
             fprintf(log_file, "[%s] action: MOVE, msg: %s report is missing\n", timestamp, expected_files[i]);
+            fclose(log_file);
+        }
+        else
+        {
+            // Move the file to the dashboard directory
+            char mv_command[1024];
+            snprintf(mv_command, sizeof(mv_command), "mv %s/%s %s/", UPLOAD_DIR, expected_files[i], DASHBOARD_DIR);
+            int mv_status = system(mv_command);
+
+            // Log the move event or error
+            FILE *log_file = fopen(LOG_FILE, "a");
+            if (log_file == NULL)
+            {
+                perror("fopen");
+                exit(EXIT_FAILURE);
+            }
+            if (mv_status == 0)
+            {
+                fprintf(log_file, "[%s] action: MOVE, msg: %s has been moved to dashboard\n", timestamp, expected_files[i]);
+            }
+            else
+            {
+                fprintf(log_file, "[%s] action: MOVE, msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
+            }
             fclose(log_file);
         }
     }
