@@ -8,8 +8,7 @@
 #include <time.h>
 #include <syslog.h>
 #include "daemon_task.h"
-
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+#include "constants.h"
 
 int main()
 {

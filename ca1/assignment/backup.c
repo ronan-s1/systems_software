@@ -6,10 +6,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include "daemon_task.h"
-
-#define DASHBOARD_BACKUP_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard_backup"
-#define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+#include "constants.h"
 
 void backup()
 {
@@ -53,11 +50,11 @@ void backup()
                     perror("fopen");
                     exit(EXIT_FAILURE);
                 }
-                fprintf(log_file, "[%s] action: BACKUP, msg: %s has been copied to dashboard\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: %s has been copied to dashboard_backup/ directory\n", timestamp, expected_files[i]);
             }
             else
             {
-                fprintf(log_file, "[%s] action: BACKUP, msg: Error moving file %s to dashboard\n", timestamp, expected_files[i]);
+                fprintf(log_file, "[%s] action: BACKUP, msg: Error moving file %s to dashboard_backup/ directory\n", timestamp, expected_files[i]);
                 exit(EXIT_FAILURE);
             }
             fclose(log_file);

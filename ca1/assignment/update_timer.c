@@ -3,16 +3,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include "daemon_task.h"
+#include "constants.h"
 
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
-
-// again you can use this if you want to update it to the next day
 void update_timer(struct tm *due_date)
 {
     due_date->tm_mday += 1;
     mktime(due_date);
 
-
+    // logging
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
     char timestamp[20];

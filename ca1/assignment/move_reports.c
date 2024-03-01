@@ -6,10 +6,7 @@
 #include <time.h>
 #include <sys/stat.h>
 #include "daemon_task.h"
-
-#define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
-#define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+#include "constants.h"
 
 void move_reports()
 {

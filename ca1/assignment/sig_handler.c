@@ -6,8 +6,7 @@
 #include <time.h>
 #include <string.h>
 #include "daemon_task.h"
-
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+#include "constants.h"
 
 void sig_handler(int sigNum)
 {
