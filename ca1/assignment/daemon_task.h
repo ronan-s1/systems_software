@@ -16,4 +16,5 @@ void update_timer(struct tm*);
 void lock_directories(void);
 
 void unlock_directories(void);
+
 #endif
