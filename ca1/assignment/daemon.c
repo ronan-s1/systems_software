@@ -77,14 +77,7 @@ int main()
         close(x);
     }
 
-    // Open log file in append mode
-    int fd = open(LOG_FILE, O_CREAT | O_WRONLY | O_APPEND, 0644);
-    if (fd == -1)
-    {
-        perror("open failed");
-        exit(EXIT_FAILURE);
-    }
-
+    // time to check for file uploads
     struct tm check_uploads_time;
     time(&now);
     check_uploads_time = *localtime(&now);
@@ -101,9 +94,17 @@ int main()
     info = localtime(&rawtime);
     strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", info);
 
-    // Log message to file
-    dprintf(fd, "[%s] Daemon is running...\n", timestamp);
-    fsync(fd);
+    // get daemon pid
+    int daemon_pid = getpid();
+
+    FILE *log_file = fopen(LOG_FILE, "a");
+    if (log_file == NULL)
+    {
+        perror("fopen");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(log_file, "[%s] Daemon is running (PID: %d)\n", timestamp, daemon_pid);
+    fclose(log_file);
 
     // Main daemon loop
     while (1)
@@ -142,18 +143,15 @@ int main()
         if (seconds_to_transfer == 0)
         {
             lock_directories();
-			move_reports();	  
-			backup();
-			sleep(30);
-			unlock_directories();
-    
-			// After tasks are finished, start counting to next day
-			update_timer(&backup_time);
+            move_reports();
+            backup();
+            sleep(30);
+            unlock_directories();
+
+            // After tasks are finished, start counting to next day
+            update_timer(&backup_time);
         }
         sleep(1);
     }
-
-    // Close log file
-    close(fd);
     return EXIT_SUCCESS;
 }
