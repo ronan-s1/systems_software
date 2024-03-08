@@ -1,12 +1,12 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define UPLOAD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/upload"
+#define UPLOAD_DIR "./upload"
 
-#define LOG_FILE "/home/ronan/Desktop/shared_folder/ca1/assignment/log.txt"
+#define LOG_FILE "./log.txt"
 
-#define DASHBOARD_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard"
+#define DASHBOARD_DIR "./dashboard"
 
-#define DASHBOARD_BACKUP_DIR "/home/ronan/Desktop/shared_folder/ca1/assignment/dashboard_backup"
+#define DASHBOARD_BACKUP_DIR "./dashboard_backup"
 
 #endif

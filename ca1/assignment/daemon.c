@@ -60,14 +60,6 @@ int main()
         exit(EXIT_SUCCESS);
     }
 
-    // Change the current working dir to root.
-    // This will eliminate any issues of running on a mounted drive
-    if (chdir("/") < 0)
-    {
-        perror("chdir failed");
-        exit(EXIT_FAILURE);
-    }
-
     // call umask() to set the file mode creation mask to 0
     umask(0);
 
