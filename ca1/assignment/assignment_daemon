@@ -1,0 +1,36 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          daemon
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+case "$1" in
+    start)
+        ./daemon
+        ;;
+    stop)
+        # Get the PID of the daemon process
+        pid=$(pidof daemon)
+        if [ -z "$pid" ]; then
+            exit 1
+        fi
+        # Send SIGTERM signal to the daemon process
+        kill "$pid"
+        ;;
+    transfer)
+        # Get the PID of the daemon process
+        pid=$(pidof daemon)
+        if [ -z "$pid" ]; then
+            exit 1
+        fi
+        # Send SIGINT signal with parameter -2 to the daemon process
+        kill -2 "$pid"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+exit 0
