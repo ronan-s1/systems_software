@@ -6,7 +6,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
-#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <pwd.h>
+#include <grp.h>
 
 #define PORT 8080
 #define MAX_CLIENTS 5
@@ -14,68 +18,138 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-void *handle_client(void *socket_desc) {
+void *handle_client(void *socket_desc)
+{
     int client_socket = *(int *)socket_desc;
     char buffer[BUFFER_SIZE] = {0};
     char file_name[BUFFER_SIZE];
+    char username[BUFFER_SIZE];
+    int user_id;
+    int group_id;
     FILE *received_file;
-    char *file_content;
+    char *file_content = NULL; // Initialize to NULL
     int bytes_received;
+    int user_in_manufacturing = 0;
+    int user_in_distribution = 0;
+    struct group *grp;
 
-    // Receive file name from client
+    // Receive message from client
     bytes_received = recv(client_socket, buffer, BUFFER_SIZE, 0);
-    if (bytes_received < 0) {
+    if (bytes_received < 0)
+    {
         perror("recv");
         close(client_socket);
         pthread_exit(NULL);
     }
+    buffer[bytes_received] = '\0'; // Add null terminator to received message
 
-    // Parse received message to extract file name
-    buffer[bytes_received] = '\0';
-    sscanf(buffer, "%[^>]", file_name);
-    printf("buffer: %s\n", buffer);
+    // Parse received message to extract username and file name
+    char *token = strtok(buffer, ">");
+    if (token == NULL)
+    {
+        fprintf(stderr, "Invalid message format\n");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+    strcpy(file_name, token);
 
-    // Get current username
-    char *current_user = getlogin();
-    if (current_user == NULL) {
-        perror("getlogin");
+    token = strtok(NULL, ">");
+    if (token == NULL)
+    {
+        fprintf(stderr, "Invalid message format\n");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+    strcpy(username, token);
+
+    token = strtok(NULL, ">");
+    if (token == NULL)
+    {
+        fprintf(stderr, "Invalid message format\n");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+    user_id = atoi(token);
+
+    token = strtok(NULL, ">");
+    if (token == NULL)
+    {
+        fprintf(stderr, "Invalid message format\n");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+    group_id = atoi(token);
+
+    file_content = strtok(NULL, ">"); // strtok to get file content
+    if (file_content == NULL)
+    {
+        fprintf(stderr, "Invalid message format\n");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+
+    printf("\nUsername: %s\nFile: %s\nUserID: %d\nGroupID: %d\nContent: %s", username, file_name, user_id, group_id, file_content);
+
+    // Get user's group
+    if ((grp = getgrgid(group_id)) != NULL)
+    {
+        printf("\nGroup name: %s\n", grp->gr_name);
+        if (strcmp(grp->gr_name, "manufacturing") == 0)
+        {
+            user_in_manufacturing = 1;
+        }
+        else if (strcmp(grp->gr_name, "distribution") == 0)
+        {
+            user_in_distribution = 1;
+        }
+    }
+    else
+    {
+        perror("getgrgid");
         close(client_socket);
         pthread_exit(NULL);
     }
 
     // Open file
     char path[BUFFER_SIZE * 2];
-    if (strcmp(current_user, "Manufacturing") == 0) {
+    if (user_in_manufacturing)
+    {
         sprintf(path, "./manufacturing/%s", file_name);
-    } else if (strcmp(current_user, "Distribution") == 0) {
+    }
+    else if (user_in_distribution)
+    {
         sprintf(path, "./distribution/%s", file_name);
-    } else {
-        printf("Unknown user: %s\n", current_user);
+    }
+    else
+    {
+        printf("Invalid user group\n");
         close(client_socket);
         pthread_exit(NULL);
     }
-    printf("Path: %s\n", path);
-    if ((received_file = fopen(path, "wb")) == NULL) {
+
+    // Create file
+    if ((received_file = fopen(path, "wb")) == NULL)
+    {
         perror("fopen");
         close(client_socket);
         pthread_exit(NULL);
     }
 
     // Receive file data from client
-    file_content = strchr(buffer, '>') + 1; // Move pointer to file content
-    fwrite(file_content, 1, bytes_received - (strlen(file_name) + 1), received_file);
+    fwrite(file_content, 1, strlen(file_content), received_file);
 
-    while ((bytes_received = recv(client_socket, buffer, BUFFER_SIZE, 0)) > 0) {
-        fwrite(buffer, 1, bytes_received, received_file);
+    fclose(received_file);
+
+    // Set ownership of the file to the transfer user
+    if (chown(path, user_id, -1) == -1)
+    {
+        perror("chown");
     }
 
-    // Close file and client socket
-    fclose(received_file);
     close(client_socket);
-
     pthread_exit(NULL);
 }
+
 
 
 int main()
