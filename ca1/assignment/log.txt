@@ -1,14 +1,28 @@
-[2024-03-01 01:01:15] Daemon is running...
-[2024-03-01 01:02:07] action: TRANSFER_TRIGGER, msg: initiating MOVE and BACKUP
-[2024-03-01 01:02:07] action: CHECK, msg: warehouse.xml report is missing
-[2024-03-01 01:02:07] action: CHECK, msg: manufacturing.xml report is present, modified_by: root, last_modified_time: 2024-02-29 23:08:38
-[2024-03-01 01:02:07] action: CHECK, msg: sales.xml report is present, modified_by: root, last_modified_time: 2024-02-29 23:55:05
-[2024-03-01 01:02:07] action: CHECK, msg: distribution.xml report is present, modified_by: root, last_modified_time: 2024-02-29 21:44:49
-[2024-03-01 01:02:07] action: MOVE, msg: warehouse.xml report is missing
-[2024-03-01 01:02:07] action: MOVE, msg: manufacturing.xml has been moved to dashboard
-[2024-03-01 01:02:07] action: MOVE, msg: sales.xml has been moved to dashboard
-[2024-03-01 01:02:07] action: MOVE, msg: distribution.xml has been moved to dashboard
-[2024-03-01 01:02:07] action: BACKUP, msg: warehouse.xml report is missing
-[2024-03-01 01:02:07] action: BACKUP, msg: manufacturing.xml has been copied to dashboard
-[2024-03-01 01:02:07] action: BACKUP, msg: sales.xml has been copied to dashboard
-[2024-03-01 01:02:07] action: BACKUP, msg: distribution.xml has been copied to dashboard
+[2024-03-11 23:21:07] Daemon is running (PID: 3751)
+[2024-03-11 23:30:00] action: CHECK, msg: warehouse.xml report is missing
+[2024-03-11 23:30:00] action: CHECK, msg: manufacturing.xml report is present, modified_by: root, last_modified_time: 2024-03-11 13:12:43
+[2024-03-11 23:30:00] action: CHECK, msg: sales.xml report is present, modified_by: root, last_modified_time: 2024-03-11 13:12:46
+[2024-03-11 23:30:00] action: CHECK, msg: distribution.xml report is present, modified_by: root, last_modified_time: 2024-03-11 13:12:40
+[2024-03-11 23:30:00] action: TIME_UPDATE, msg: timer updated, due next day, 12
+[2024-03-11 01:00:00] action: MOVE, msg: warehouse.xml report is missing
+[2024-03-11 01:00:00] action: MOVE, msg: manufacturing.xml has been moved to dashboard
+[2024-03-11 01:00:00] action: MOVE, msg: sales.xml has been moved to dashboard
+[2024-03-11 01:00:00] action: MOVE, msg: distribution.xml has been moved to dashboard
+[2024-03-11 01:00:00] action: BACKUP, msg: warehouse.xml report is missing
+[2024-03-11 01:00:00] action: BACKUP, msg: manufacturing.xml has been copied to dashboard_backup
+[2024-03-11 01:00:00] action: BACKUP, msg: sales.xml has been copied to dashboard_backup
+[2024-03-11 01:00:00] action: BACKUP, msg: distribution.xml has been copied to dashboard_backup
+[2024-03-11 23:24:29] action: TIME_UPDATE, msg: timer updated, due next day, 12
+[2024-03-11 23:25:25] action: TRANSFER_TRIGGER, msg: initiating MOVE and BACKUP
+[2024-03-11 23:25:25] action: CHECK, msg: warehouse.xml report is missing
+[2024-03-11 23:25:25] action: CHECK, msg: manufacturing.xml report is missing
+[2024-03-11 23:25:25] action: CHECK, msg: sales.xml report is missing
+[2024-03-11 23:25:25] action: CHECK, msg: distribution.xml report is missing
+[2024-03-11 23:25:25] action: MOVE, msg: warehouse.xml report is missing
+[2024-03-11 23:25:25] action: MOVE, msg: manufacturing.xml report is missing
+[2024-03-11 23:25:25] action: MOVE, msg: sales.xml report is missing
+[2024-03-11 23:25:25] action: MOVE, msg: distribution.xml report is missing
+[2024-03-11 23:25:25] action: BACKUP, msg: warehouse.xml report is missing
+[2024-03-11 23:25:25] action: BACKUP, msg: manufacturing.xml has been copied to dashboard_backup
+[2024-03-11 23:25:25] action: BACKUP, msg: sales.xml has been copied to dashboard_backup
+[2024-03-11 23:25:25] action: BACKUP, msg: distribution.xml has been copied to dashboard_backup

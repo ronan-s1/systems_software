@@ -1,0 +1,11 @@
+1 Apple
+2 Banana
+3 Carrot
+4 Date
+5 Eggplant
+6 Fig
+7 Grape
+8 Honeydew
+9 Iceberg lettuce
+10 Jackfruit
+
