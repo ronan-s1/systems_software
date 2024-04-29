@@ -27,7 +27,7 @@ void *handle_client(void *socket_desc)
     int user_id;
     int group_id;
     FILE *received_file;
-    char *file_content = NULL; // Initialize to NULL
+    char *file_content = NULL;
     int bytes_received;
     int user_in_manufacturing = 0;
     int user_in_distribution = 0;
@@ -41,13 +41,13 @@ void *handle_client(void *socket_desc)
         close(client_socket);
         pthread_exit(NULL);
     }
-    buffer[bytes_received] = '\0'; // Add null terminator to received message
+    buffer[bytes_received] = '\0';
 
     // Parse received message to extract username and file name
     char *token = strtok(buffer, ">");
     if (token == NULL)
     {
-        fprintf(stderr, "Invalid message format\n");
+        fprintf(stderr, "Invalid message format - file_name\n");
         close(client_socket);
         pthread_exit(NULL);
     }
@@ -56,7 +56,7 @@ void *handle_client(void *socket_desc)
     token = strtok(NULL, ">");
     if (token == NULL)
     {
-        fprintf(stderr, "Invalid message format\n");
+        fprintf(stderr, "Invalid message format - user name\n");
         close(client_socket);
         pthread_exit(NULL);
     }
@@ -65,7 +65,7 @@ void *handle_client(void *socket_desc)
     token = strtok(NULL, ">");
     if (token == NULL)
     {
-        fprintf(stderr, "Invalid message format\n");
+        fprintf(stderr, "Invalid message format - user id\n");
         close(client_socket);
         pthread_exit(NULL);
     }
@@ -74,16 +74,16 @@ void *handle_client(void *socket_desc)
     token = strtok(NULL, ">");
     if (token == NULL)
     {
-        fprintf(stderr, "Invalid message format\n");
+        fprintf(stderr, "Invalid message format - group id\n");
         close(client_socket);
         pthread_exit(NULL);
     }
     group_id = atoi(token);
 
-    file_content = strtok(NULL, ">"); // strtok to get file content
+    file_content = strtok(NULL, ">");
     if (file_content == NULL)
     {
-        fprintf(stderr, "Invalid message format\n");
+        fprintf(stderr, "Invalid message format - file content\n");
         close(client_socket);
         pthread_exit(NULL);
     }
@@ -137,11 +137,18 @@ void *handle_client(void *socket_desc)
 
     // Receive file data from client
     fwrite(file_content, 1, strlen(file_content), received_file);
-
     fclose(received_file);
 
-    // Set ownership of the file to the transfer user
-    if (chown(path, user_id, -1) == -1)
+    // Set ownership of the file to the user who runs the server
+    struct passwd *pwd = getpwuid(user_id);
+    if (pwd == NULL)
+    {
+        perror("getpwuid");
+        close(client_socket);
+        pthread_exit(NULL);
+    }
+
+    if (chown(path, pwd->pw_uid, -1) == -1)
     {
         perror("chown");
     }
@@ -149,8 +156,6 @@ void *handle_client(void *socket_desc)
     close(client_socket);
     pthread_exit(NULL);
 }
-
-
 
 int main()
 {
@@ -186,7 +191,7 @@ int main()
 
     while (1)
     {
-        printf("Waiting for incoming connections...\n");
+        printf("Waiting for connections...\n");
 
         // Accept connection
         if ((client_socket = accept(server_socket, (struct sockaddr *)&client_addr, (socklen_t *)&addr_len)) < 0)

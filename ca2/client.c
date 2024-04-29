@@ -20,7 +20,6 @@ int main()
     char file_name[BUFFER_SIZE];
     char buffer[BUFFER_SIZE];
     FILE *file_to_send;
-    int bytes_read;
 
     // Create socket
     if ((client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
